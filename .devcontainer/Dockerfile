@@ -61,8 +61,8 @@ USER node
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
 ENV PATH=$PATH:/usr/local/share/npm-global/bin
 
-# Set the default shell to zsh rather than sh
-ENV SHELL=/bin/zsh
+# Set the default shell to bash
+ENV SHELL=/bin/bash
 
 # Set the default editor and visual
 ENV EDITOR=nano
@@ -82,7 +82,7 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
 # Add claude-yolo alias
-RUN echo "alias claude-yolo='claude --dangerously-skip-permissions'" >> ~/.zshrc
+RUN echo "alias claude-yolo='claude --dangerously-skip-permissions'" >> ~/.bashrc
 
 
 # Copy and set up firewall script
