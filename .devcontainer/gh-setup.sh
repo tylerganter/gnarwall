@@ -13,8 +13,12 @@ if gh auth status &>/dev/null; then
     [[ "$confirm" != "y" && "$confirm" != "Y" ]] && exit 0
 fi
 
-echo "This will open a browser on your host machine for GitHub OAuth."
-echo "You'll get a URL and code to enter in the browser."
+echo "Steps:"
+echo "  1. You'll get a one-time code below"
+echo "  2. Open https://github.com/login/device in your browser"
+echo "  3. Enter the code to authenticate"
+echo ""
+echo "(Ignore the 'Failed opening a web browser' warning - expected in containers)"
 echo ""
 read -p "Press Enter to continue..."
 echo ""
