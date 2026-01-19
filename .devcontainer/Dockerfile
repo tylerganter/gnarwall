@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   jq \
   nano \
   vim \
+  tree \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Ensure default node user has access to /usr/local/share
@@ -81,8 +82,32 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 # Install Claude
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
-# Add claude-yolo alias
-RUN echo "alias claude-yolo='claude --dangerously-skip-permissions'" >> ~/.bashrc
+# Configure bash with colors and aliases
+RUN cat >> ~/.bashrc << 'EOF'
+
+# Colors - cyan user, green host, yellow dir
+export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33;1m\]\w\[\033[m\]\$ "
+export CLICOLOR=1
+export TERM=xterm-256color
+
+# Color aliases
+alias ls='ls --color=auto'
+alias ll='ls -alF'
+alias la='ls -A'
+alias grep='grep --color=auto'
+alias tree='tree -F'
+
+# Helpers
+fc() { ls -1 $1 | wc -l; }
+duall() { du -sch .[!.]* * |sort -h; }
+pprint() { cat $1 | jq; }
+
+# Git
+export GIT_LFS_SKIP_SMUDGE=1
+
+# Claude alias
+alias claude-yolo='claude --dangerously-skip-permissions'
+EOF
 
 
 # Copy and set up firewall script
