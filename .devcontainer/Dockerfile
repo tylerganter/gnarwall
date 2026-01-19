@@ -107,6 +107,11 @@ export GIT_LFS_SKIP_SMUDGE=1
 
 # Claude alias
 alias claude-yolo='claude --dangerously-skip-permissions'
+
+# Show GitHub setup reminder if not authenticated
+if ! gh auth status &>/dev/null 2>&1; then
+    echo "Tip: Run 'gh-setup' to configure GitHub access"
+fi
 EOF
 
 
@@ -116,4 +121,10 @@ USER root
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
   echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
   chmod 0440 /etc/sudoers.d/node-firewall
+USER node
+
+# Install GitHub setup helper
+COPY gh-setup.sh /usr/local/bin/gh-setup
+USER root
+RUN chmod +x /usr/local/bin/gh-setup
 USER node
