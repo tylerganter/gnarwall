@@ -2,9 +2,9 @@
 
 This guide covers one-time setup for GitHub access in the gnarwall devcontainer.
 
-## Bot Account
+## GitHub App
 
-The container uses a separate "bot" GitHub account so the human owner can approve PRs created by the AI. See `DEVCONTAINER.md` for bot account creation steps.
+The container uses a GitHub App for authentication. The app has its own identity, allowing the human owner to approve PRs created by the AI.
 
 ## Quick Start
 
@@ -14,11 +14,16 @@ Authenticate using the `gh-setup` command:
 gh-setup
 ```
 
-The script walks you through creating a fine-grained PAT for the bot account. The token is stored in a persistent Docker volume at `~/.config/gh/`.
+The script prompts for:
+- **App ID** — from your app's settings page
+- **Installation ID** — from the URL after installing the app
+- **Private key** — the .pem file downloaded when creating the app
 
-## Token Permissions
+Credentials are stored in `.devcontainer/.gh-app/` (gitignored).
 
-The standard setup includes:
+## App Permissions
+
+The GitHub App should have these permissions:
 
 | Permission | Access | Purpose |
 |------------|--------|---------|
@@ -27,15 +32,15 @@ The standard setup includes:
 | Pull requests | Read/Write | Create PRs, comment, review |
 | Metadata | Read-only | Required base permission |
 
-Optional: Add **Actions** (read-only) for workflow status or **Workflows** (read/write) for modifying `.github/workflows/`.
+Permissions explicitly **omitted** for security:
+- Administration (no repo settings changes)
+- Actions/Workflows (no CI/CD modifications)
 
 ## Security Model
 
 ### Two-Layer Protection
 
-Access control is split between two complementary mechanisms:
-
-1. **Fine-grained PAT**: Restricts access to specific repositories only (not all repos in the account)
+1. **GitHub App**: Restricts access to only installed repositories with defined permissions
 2. **Branch Protection**: Server-side rules that cannot be bypassed
 
 ### Branch Protection (GitHub Rulesets)
@@ -51,11 +56,13 @@ The `main` branch should be protected with a GitHub Ruleset:
 
 ## Credential Management
 
-### Token Persistence
+### Token Refresh
 
-Credentials persist across container rebuilds via Docker volume. Re-run `gh-setup` only when:
-- Token expires (max 1 year, recommend 90 days)
-- Permissions need updating
+GitHub App tokens expire after 1 hour. To refresh:
+
+```bash
+.devcontainer/gh-app-token.sh | gh auth login --with-token
+```
 
 ### Clear Credentials
 
@@ -70,13 +77,13 @@ docker volume rm gnarwall-gh-config
 ## Troubleshooting
 
 ### "Permission denied" on push
-- Check `gh auth status` - token may be expired
-- Verify token has Contents write permission
+- Check `gh auth status` — token may need refresh
+- Verify app has Contents write permission
 - If pushing to main, you must use a PR (branch protection)
 
 ### "Repository not found"
-- Fine-grained PAT may not include this repository
-- Create a new token with the correct repository scope
+- App may not be installed on this repository
+- Check installation at https://github.com/settings/installations
 
-### Token expired
-Run `gh-setup` again and create a new fine-grained PAT.
+### Authentication errors
+Run `gh-setup` again to refresh credentials.

@@ -32,17 +32,22 @@ claude
 claude-yolo
 ```
 
-## Bot Account Setup (One-Time)
+## GitHub App Setup (One-Time)
 
-A separate GitHub "bot" account is used so you can approve PRs created by the AI (GitHub doesn't allow approving your own PRs).
+A GitHub App is used so you can approve PRs created by the AI. The app has its own identity, so PRs it creates can be approved by you (GitHub doesn't allow approving your own PRs).
 
-1. Create a GitHub account with an email alias (e.g., `yourname+bot@gmail.com`)
-2. Add the bot as a collaborator with **Write** access to this repo
-3. Run `gh-setup` inside the container—it will walk you through creating a fine-grained PAT for the bot account
+1. Create a GitHub App at https://github.com/settings/apps/new with these permissions:
+   - **Contents**: Read and write
+   - **Pull requests**: Read and write
+   - **Issues**: Read and write
+   - **Metadata**: Read-only (automatically included)
+2. Generate and download a private key (.pem file)
+3. Install the app on this repository
+4. Run `gh-setup` inside the container—it will configure authentication using your app credentials
 
 ## GitHub Setup
 
-Run `gh-setup` inside the container. It provides a step-by-step walkthrough for creating the bot's fine-grained PAT and configuring GitHub CLI.
+Run `gh-setup` inside the container. It will prompt for your App ID, Installation ID, and private key path.
 
 ### Security Model
 
@@ -50,10 +55,10 @@ Access control is split between two complementary mechanisms:
 
 | Layer | Controls | Set Where |
 |-------|----------|-----------|
-| **Fine-grained PAT** | Which repositories can be accessed | GitHub token settings |
+| **GitHub App** | Which repositories and permissions | App installation settings |
 | **Branch Protection** | Which branches can be modified and how | GitHub repo settings |
 
-**Fine-grained Personal Access Tokens (PATs)** restrict access to specific repositories. The token created during setup only has access to the `tylerganter/gnarwall` repository—even if the token is compromised, it cannot access any other repositories in your account.
+**GitHub App Installation** restricts access to only the repositories where the app is installed. The app is configured with specific permissions (Contents, PRs, Issues) and cannot access other repositories or perform admin actions.
 
 **Branch Protection Rules** enforce workflow requirements server-side. Even with valid repository access, no one (including AI assistants) can:
 - Push directly to protected branches
@@ -81,31 +86,28 @@ To protect the `main` branch using GitHub Rulesets:
 
 With this configuration, all changes to `main` must go through a pull request that you approve. The AI can create branches, push code, and open PRs, but cannot merge without your explicit approval.
 
-### Token Permissions
+### App Permissions
 
-The bot account's fine-grained PAT needs these permissions (scoped to this repo only):
+The GitHub App needs these permissions:
 
 | Permission | Access Level | Enables |
 |------------|--------------|---------|
 | **Contents** | Read and write | Push/pull code, create branches |
 | **Issues** | Read and write | Create, comment, close, label issues |
 | **Pull requests** | Read and write | Create PRs, comment, review, request reviews |
-| **Metadata** | Read-only | Required base permission for all tokens |
+| **Metadata** | Read-only | Required base permission (automatic) |
 
-Optional permissions depending on your workflow:
-
-| Permission | Access Level | Enables |
-|------------|--------------|---------|
-| **Actions** | Read-only | View workflow run status and logs |
-| **Workflows** | Read and write | Modify `.github/workflows/` files |
+Permissions we explicitly **omit** for security:
+- **Administration** — cannot change repo settings or rulesets
+- **Actions/Workflows** — cannot modify CI/CD pipelines
 
 ### Credential Persistence
 
-GitHub credentials are stored in a Docker volume (`gnarwall-gh-config`) mounted at `~/.config/gh/`. This means:
+GitHub App credentials are stored in `.devcontainer/.gh-app/` (gitignored). This includes:
+- `private-key.pem` — the app's private key
+- `app-id` and `installation-id` — app identifiers
 
-- Credentials persist across container rebuilds
-- You only need to run `gh-setup` once (unless the token expires)
-- Deleting the volume will require re-authentication
+GitHub CLI session data is stored in the Docker volume `gnarwall-gh-config` at `~/.config/gh/`.
 
 To manually clear credentials:
 ```bash
@@ -116,9 +118,12 @@ gh auth logout
 docker volume rm gnarwall-gh-config
 ```
 
-### Token Expiration
+### Token Refresh
 
-Fine-grained PATs have a maximum lifetime of 1 year. When creating your token, choose an expiration that balances security and convenience (e.g., 90 days). The container will show an error when the token expires, at which point run `gh-setup` again with a new token.
+GitHub App tokens expire after 1 hour. To refresh:
+```bash
+.devcontainer/gh-app-token.sh | gh auth login --with-token
+```
 
 ## Notes
 

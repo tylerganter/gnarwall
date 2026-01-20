@@ -14,6 +14,16 @@ gh auth status
 
 If authentication fails, see [SETUP.md](./SETUP.md) for one-time setup.
 
+## Token Refresh
+
+GitHub App tokens expire after **1 hour**. If you see authentication errors during a session, refresh the token:
+
+```bash
+.devcontainer/gh-app-token.sh | gh auth login --with-token
+```
+
+This regenerates the token using the stored app credentials. Run `gh-setup` only for initial setup or to reconfigure credentials.
+
 ## Core Principle
 
 **Never work directly on `main`.** Always use feature branches. Main is protected and requires PRs with approval.
