@@ -11,7 +11,7 @@ Replace the WordPress-exported site with a clean, maintainable static site. The 
 | Component | Count/Size | Location | Status |
 |-----------|------------|----------|--------|
 | Blog posts (HTML) | 56 | `docs/201*/` | Committed (WordPress cruft) |
-| Static pages | 3 | `docs/about/`, `docs/contact/`, `docs/index.html` | Committed (WordPress cruft) |
+| Static pages | 2 | `docs/about/`, `docs/index.html` | Committed (WordPress cruft) |
 | CSS/fonts | 1.8MB | `docs/_static/` | Committed (minified, unreadable names) |
 | Images (Beijing post) | 27 | `docs/wp-content/uploads/2018/05/` | Committed |
 | Images (remaining) | ~1,967 | `docs/wp-content/uploads/` | NOT committed (564MB total) |
@@ -45,6 +45,12 @@ Replace the WordPress-exported site with a clean, maintainable static site. The 
 - All CSS (write minimal responsive styles)
 - All JavaScript (remove entirely, or add minimal if needed)
 
+### What We Remove
+- **Contact page**: No forms needed for a static site
+- **Comments**: Not supported in static site
+- **Search**: Not needed (small site, easy to browse)
+- **WordPress login/admin**: Obviously not needed
+
 ---
 
 ## Phase 1: Content Extraction ✅ COMPLETE
@@ -66,7 +72,7 @@ Extract structured data from the WordPress HTML files.
 
 **Results:**
 - 56 posts extracted with titles, dates, content, and featured images
-- 2 static pages (about, contact)
+- 1 static page (about) - contact page removed (not needed for static site)
 - All image paths cleaned and normalized
 - Output: `/workspace/data/content.json` (4MB)
 
@@ -96,10 +102,9 @@ Create clean HTML/CSS templates. User provides design direction.
 - [ ] **Test locally**: Verify with sample post content
 - [ ] **Review**: Human approval of post layout
 
-### Checkpoint 2D: Static Pages
+### Checkpoint 2D: About Page
 - [ ] Create about page template
-- [ ] Create contact page template
-- [ ] **Test locally**: Verify both pages render correctly
+- [ ] **Test locally**: Verify page renders correctly
 - [ ] **Commit**: All templates + CSS
 
 ---
@@ -112,7 +117,7 @@ Generate the new static site from templates + extracted content.
 - [ ] Write Python script to generate HTML from templates + JSON
 - [ ] Generate `docs/index.html` (homepage with all post cards)
 - [ ] Generate `docs/YYYY/MM/DD/slug/index.html` for each post
-- [ ] Generate `docs/about/index.html` and `docs/contact/index.html`
+- [ ] Generate `docs/about/index.html`
 - [ ] **Test locally**: Full site navigation works
 - [ ] **Review**: Spot-check several posts
 
@@ -180,7 +185,6 @@ For each month directory:
 docs/
 ├── index.html                          # Homepage (post grid)
 ├── about/index.html                    # About page
-├── contact/index.html                  # Contact page
 ├── css/
 │   └── style.css                       # Single CSS file (~5-10KB)
 ├── wp-content/uploads/                 # Images (preserved)
