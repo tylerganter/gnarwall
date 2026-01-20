@@ -34,12 +34,14 @@ Access control is split between two complementary mechanisms:
 1. **Fine-grained PAT**: Restricts access to specific repositories only (not all repos in the account)
 2. **Branch Protection**: Server-side rules that cannot be bypassed
 
-### Branch Protection Rules
+### Branch Protection (GitHub Rulesets)
 
-The `main` branch should be protected with:
-- Require pull request before merging
-- Require at least 1 approval
-- Do not allow bypassing settings
+The `main` branch should be protected with a GitHub Ruleset:
+- **Enforcement status**: Active (critical—disabled rulesets don't protect anything)
+- **Target branches**: Include default branch
+- **Require a pull request before merging**: enabled, with 1 required approval
+- **Block force pushes**: enabled
+- **Bypass list**: empty or restricted to trusted admins
 
 **Important**: Even with valid credentials, direct pushes to protected branches will fail. All changes must go through PRs.
 
