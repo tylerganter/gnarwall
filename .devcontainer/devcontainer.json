@@ -1,6 +1,5 @@
 {
-  "name": "gnarwall",
-  "containerName": "gnarwall",
+  "name": "Claude Code Sandbox",
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
@@ -11,9 +10,9 @@
     }
   },
   "runArgs": [
-    "--name=gnarwall",
     "--cap-add=NET_ADMIN",
-    "--cap-add=NET_RAW"
+    "--cap-add=NET_RAW",
+    "-p", "8000:8000"
   ],
   "customizations": {
     "vscode": {
@@ -55,6 +54,6 @@
   },
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
   "workspaceFolder": "/workspace",
-  "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+  "postStartCommand": "sudo /usr/local/bin/init-gh-volume.sh && sudo /usr/local/bin/init-firewall.sh",
   "waitFor": "postStartCommand"
 }

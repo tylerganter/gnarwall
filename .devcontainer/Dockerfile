@@ -106,7 +106,7 @@ pprint() { cat $1 | jq; }
 export GIT_LFS_SKIP_SMUDGE=1
 
 # Claude alias
-alias claude-yolo='claude --dangerously-skip-permissions'
+claude-yolo() { claude --dangerously-skip-permissions "$@"; }
 
 # Show GitHub setup reminder if not authenticated
 if ! gh auth status &>/dev/null 2>&1; then
@@ -121,6 +121,14 @@ USER root
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
   echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
   chmod 0440 /etc/sudoers.d/node-firewall
+USER node
+
+# Copy and set up gh volume init script
+COPY init-gh-volume.sh /usr/local/bin/
+USER root
+RUN chmod +x /usr/local/bin/init-gh-volume.sh && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-gh-volume.sh" > /etc/sudoers.d/node-gh-volume && \
+  chmod 0440 /etc/sudoers.d/node-gh-volume
 USER node
 
 # Install GitHub setup helper

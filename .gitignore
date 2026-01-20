@@ -1,0 +1,14 @@
+# WordPress export (6.3GB, reference only)
+gnarwall-export/
+
+# Local development
+.DS_Store
+*.log
+node_modules/
+
+# Claude settings (local)
+.claude/settings.local.json
+
+# Temporary files
+*.tmp
+*.swp
