@@ -1,6 +1,5 @@
 {
-  "name": "gnarwall",
-  "containerName": "gnarwall",
+  "name": "Claude Code Sandbox",
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
@@ -11,7 +10,6 @@
     }
   },
   "runArgs": [
-    "--name=gnarwall",
     "--cap-add=NET_ADMIN",
     "--cap-add=NET_RAW"
   ],
