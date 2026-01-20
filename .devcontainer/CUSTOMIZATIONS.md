@@ -8,6 +8,7 @@ This document tracks changes made to the official Claude Code devcontainer refer
 |--------|-----------|--------|--------|
 | Mounts | 2 volumes | 3 volumes | Added `gnarwall-gh-config` volume |
 | postStartCommand | Firewall only | Firewall + gh volume init | Separate concerns |
+| runArgs | 2 args | 4 args | Added port forwarding for local dev server |
 
 **Added mount:**
 ```json
@@ -22,6 +23,13 @@ Persists GitHub CLI authentication across container rebuilds.
 ```
 
 Runs gh volume initialization before firewall setup.
+
+**Added port forwarding:**
+```json
+"-p", "8000:8000"
+```
+
+Exposes port 8000 for local development server. This is consistent with the firewall's security model since it already allows inbound connections from the host network.
 
 ## Dockerfile
 
