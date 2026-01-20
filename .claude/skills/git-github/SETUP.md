@@ -14,7 +14,7 @@ Authenticate using the `gh-setup` command:
 gh-setup
 ```
 
-Paste the **bot account's fine-grained PAT** when prompted. The token is stored in a persistent Docker volume at `~/.config/gh/`.
+The script walks you through creating a fine-grained PAT for the bot account. The token is stored in a persistent Docker volume at `~/.config/gh/`.
 
 ## Token Permissions
 

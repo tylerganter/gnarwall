@@ -38,12 +38,11 @@ A separate GitHub "bot" account is used so you can approve PRs created by the AI
 
 1. Create a GitHub account with an email alias (e.g., `yourname+bot@gmail.com`)
 2. Add the bot as a collaborator with **Write** access to this repo
-3. Create a fine-grained PAT for the bot (scoped to this repo only)
-4. Run `gh-setup` inside the container and paste the bot's token
+3. Run `gh-setup` inside the container—it will walk you through creating a fine-grained PAT for the bot account
 
 ## GitHub Setup
 
-Run `gh-setup` inside the container and paste the **bot account's token** when prompted.
+Run `gh-setup` inside the container. It provides a step-by-step walkthrough for creating the bot's fine-grained PAT and configuring GitHub CLI.
 
 ### Security Model
 
