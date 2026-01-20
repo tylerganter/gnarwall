@@ -1,12 +1,20 @@
 ---
 name: git-github
-description: Git and GitHub workflows for the gnarwall devcontainer. Use when working with git operations, creating branches, committing code, pushing changes, opening PRs, managing issues, or setting up GitHub authentication. Activates automatically when code changes need to be committed or pushed.
+description: Git and GitHub workflows for the gnarwall devcontainer. Use when working with git operations, creating branches, committing code, pushing changes, opening PRs, or managing issues. Activates automatically when code changes need to be committed or pushed.
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
-# Git & GitHub Workflow for Gnarwall
+# Git & GitHub Workflow
 
-This skill provides guidance for git and GitHub operations within the gnarwall devcontainer environment.
+## Prerequisites
+
+Check authentication status before GitHub operations:
+
+```bash
+gh auth status
+```
+
+If authentication fails, see [SETUP.md](./SETUP.md) for one-time GitHub setup.
 
 ## Core Principle: Always Work on Feature Branches
 
@@ -20,44 +28,6 @@ When on a non-main branch, be **permissive and proactive** about:
 - Creating PRs when a feature or fix is ready for review
 
 Don't wait to be asked—if you've made meaningful changes on a feature branch, commit and push them.
-
-## GitHub Authentication Setup
-
-Before using GitHub features, authenticate using the `gh-setup` command:
-
-```bash
-gh-setup
-```
-
-This configures a **fine-grained Personal Access Token (PAT)** with repository-scoped access. The token is stored in a persistent Docker volume at `~/.config/gh/`.
-
-### Token Permissions
-
-The standard setup includes:
-| Permission | Access | Purpose |
-|------------|--------|---------|
-| Contents | Read/Write | Push/pull code, create branches |
-| Issues | Read/Write | Create, comment, close issues |
-| Pull requests | Read/Write | Create PRs, comment, review |
-| Metadata | Read-only | Required base permission |
-
-Optional: Add **Actions** (read-only) for workflow status or **Workflows** (read/write) for modifying `.github/workflows/`.
-
-## Security Model
-
-### Two-Layer Protection
-
-1. **Fine-grained PAT**: Restricts access to specific repositories only (not all repos in the account)
-2. **Branch Protection**: Server-side rules that cannot be bypassed
-
-### Branch Protection Rules
-
-The `main` branch should be protected with:
-- Require pull request before merging
-- Require at least 1 approval
-- Do not allow bypassing settings
-
-**Important**: Even with valid credentials, direct pushes to protected branches will fail. All changes must go through PRs.
 
 ## Branch Management
 
@@ -183,12 +153,6 @@ gh pr create --draft --title "WIP: Feature X" --body "Work in progress, not read
 
 ## GitHub CLI Commands
 
-### Authentication
-
-```bash
-gh auth status
-```
-
 ### PR Management
 
 ```bash
@@ -227,24 +191,6 @@ gh issue view <number>
 gh api repos/tylerganter/gnarwall/pulls/<PR_NUMBER>/comments
 ```
 
-## Credential Management
-
-### Token Persistence
-
-Credentials persist across container rebuilds via Docker volume. Re-run `gh-setup` only when:
-- Token expires (max 1 year, recommend 90 days)
-- Permissions need updating
-
-### Clear Credentials
-
-```bash
-# Inside container
-gh auth logout
-
-# Or from host, delete the volume
-docker volume rm gnarwall-gh-config
-```
-
 ## Best Practices
 
 1. **Always work on feature branches** - Never commit directly to main; check your branch before any work
@@ -254,17 +200,3 @@ docker volume rm gnarwall-gh-config
 5. **Use descriptive branch names** - `feature/`, `fix/`, `docs/` prefixes help identify purpose
 6. **Keep PRs focused** - One logical change per PR for easier review
 7. **Write clear commit messages** - Focus on "why" not "what"; include co-author line
-
-## Troubleshooting
-
-### "Permission denied" on push
-- Check `gh auth status` - token may be expired
-- Verify token has Contents write permission
-- If pushing to main, you must use a PR (branch protection)
-
-### "Repository not found"
-- Fine-grained PAT may not include this repository
-- Create a new token with the correct repository scope
-
-### Token expired
-Run `gh-setup` again and create a new fine-grained PAT.
