@@ -120,9 +120,9 @@ docker volume rm gnarwall-gh-config
 
 ### Token Refresh
 
-GitHub App tokens expire after 1 hour but are automatically refreshed. If you see authentication errors, run:
+GitHub App tokens expire after 1 hour. To refresh:
 ```bash
-gh-setup
+.devcontainer/gh-app-token.sh | gh auth login --with-token
 ```
 
 ## Notes
