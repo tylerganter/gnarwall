@@ -134,7 +134,11 @@ def ensure_dir(path):
 
 
 def fix_content_paths(html, base_url):
-    """Add base_url prefix to absolute paths in content HTML"""
+    """Add base_url prefix to absolute paths in content HTML and clean up query strings"""
+    # Strip WordPress query parameters from image URLs (e.g., ?w=768, ?h=1024)
+    # These are URL-encoded as %3Fw=768 etc
+    html = re.sub(r'(src="[^"]+\.(jpg|jpeg|png|gif))(%3F[^"]*|(\?[^"]*))"', r'\1"', html, flags=re.IGNORECASE)
+
     if not base_url:
         return html
 
