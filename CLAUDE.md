@@ -8,13 +8,11 @@
 
 ## Local Development Server
 
-To preview the static site locally:
-
 ```bash
 cd /workspace/docs && python3 -m http.server 8000
 ```
 
-Then access http://localhost:8000 in your browser.
+Then visit http://localhost:8000/gnarwall/ (the symlink `docs/gnarwall -> .` enables this).
 
 ## Project Overview
 
