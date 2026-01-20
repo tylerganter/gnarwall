@@ -123,6 +123,14 @@ RUN chmod +x /usr/local/bin/init-firewall.sh && \
   chmod 0440 /etc/sudoers.d/node-firewall
 USER node
 
+# Copy and set up gh volume init script
+COPY init-gh-volume.sh /usr/local/bin/
+USER root
+RUN chmod +x /usr/local/bin/init-gh-volume.sh && \
+  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-gh-volume.sh" > /etc/sudoers.d/node-gh-volume && \
+  chmod 0440 /etc/sudoers.d/node-gh-volume
+USER node
+
 # Install GitHub setup helper
 COPY gh-setup.sh /usr/local/bin/gh-setup
 USER root

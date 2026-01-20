@@ -7,6 +7,7 @@ This document tracks changes made to the official Claude Code devcontainer refer
 | Change | Reference | Custom | Reason |
 |--------|-----------|--------|--------|
 | Mounts | 2 volumes | 3 volumes | Added `gnarwall-gh-config` volume |
+| postStartCommand | Firewall only | Firewall + gh volume init | Separate concerns |
 
 **Added mount:**
 ```json
@@ -14,6 +15,13 @@ This document tracks changes made to the official Claude Code devcontainer refer
 ```
 
 Persists GitHub CLI authentication across container rebuilds.
+
+**Modified postStartCommand:**
+```json
+"postStartCommand": "sudo /usr/local/bin/init-gh-volume.sh && sudo /usr/local/bin/init-firewall.sh"
+```
+
+Runs gh volume initialization before firewall setup.
 
 ## Dockerfile
 
@@ -35,17 +43,7 @@ Persists GitHub CLI authentication across container rebuilds.
 
 ## init-firewall.sh
 
-| Change | Reference | Custom | Reason |
-|--------|-----------|--------|--------|
-| gh config ownership | Not present | Added chown | Fix volume permissions |
-
-**Added at script start:**
-```bash
-# Fix ownership of gh config directory (Docker volume mounts as root)
-chown -R node:node /home/node/.config/gh
-```
-
-Docker creates volume mounts with root ownership. This fixes permissions so the `gh` CLI can write its configuration.
+No customizations to the firewall script itself. Network restrictions are applied as-is from the reference.
 
 ## Additional Files
 
@@ -57,6 +55,7 @@ Files added that don't exist in the reference:
 | `.gitignore` | Ignores `.gh-app/` directory |
 | `gh-app-token.sh` | Generates GitHub App installation tokens |
 | `gh-setup.sh` | Interactive GitHub App setup wizard |
+| `init-gh-volume.sh` | Fixes gh config volume ownership on startup |
 | `GITHUB.md` | GitHub App setup documentation |
 | `README.md` | General devcontainer documentation |
 | `CUSTOMIZATIONS.md` | This file |
