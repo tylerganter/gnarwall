@@ -133,11 +133,56 @@ def ensure_dir(path):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
 
 
+def wrap_images_for_lightbox(html):
+    """Wrap images with <a class="glightbox"> links for lightbox functionality.
+
+    Skips images that are already wrapped in <a> tags.
+    """
+    def process_img(match):
+        img_tag = match.group(0)
+
+        # Extract src for the lightbox href
+        src_match = re.search(r'src="([^"]+)"', img_tag)
+        if not src_match:
+            return img_tag
+
+        src = src_match.group(1)
+
+        # Wrap with glightbox link
+        return f'<a href="{src}" class="glightbox">{img_tag}</a>'
+
+    # First, temporarily replace images that are already in <a> tags
+    # Pattern: <a ...><img ...></a>
+    placeholder_map = {}
+    counter = [0]
+
+    def protect_linked_images(match):
+        placeholder = f'__LINKED_IMG_{counter[0]}__'
+        placeholder_map[placeholder] = match.group(0)
+        counter[0] += 1
+        return placeholder
+
+    # Protect images already wrapped in links
+    html = re.sub(r'<a\s[^>]*>\s*<img[^>]+>\s*</a>', protect_linked_images, html)
+
+    # Wrap remaining images
+    html = re.sub(r'<img[^>]+>', process_img, html)
+
+    # Restore protected images
+    for placeholder, original in placeholder_map.items():
+        html = html.replace(placeholder, original)
+
+    return html
+
+
 def fix_content_paths(html, base_url):
     """Add base_url prefix to absolute paths in content HTML and clean up query strings"""
     # Strip WordPress query parameters from image URLs (e.g., ?w=768, ?h=1024)
     # These are URL-encoded as %3Fw=768 etc
     html = re.sub(r'(src="[^"]+\.(jpg|jpeg|png|gif))(%3F[^"]*|(\?[^"]*))"', r'\1"', html, flags=re.IGNORECASE)
+
+    # Wrap images with lightbox links
+    html = wrap_images_for_lightbox(html)
 
     if not base_url:
         return html
