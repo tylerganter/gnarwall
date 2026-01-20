@@ -1,8 +1,8 @@
 #!/bin/bash
 # GitHub CLI setup helper for gnarwall devcontainer
-# Uses fine-grained PAT for repo-restricted access
+# Configures a bot account so the human can approve AI-created PRs
 
-echo "=== GitHub CLI Setup (Fine-Grained PAT) ==="
+echo "=== GitHub CLI Setup (Bot Account) ==="
 echo ""
 
 # Check if already authenticated
@@ -14,26 +14,20 @@ if gh auth status &>/dev/null; then
     [[ "$confirm" != "y" && "$confirm" != "Y" ]] && exit 0
 fi
 
-echo "This will set up GitHub CLI with a fine-grained Personal Access Token"
-echo "restricted to only the gnarwall repository."
+echo "This configures the container to use a bot account for GitHub operations."
+echo "Using a bot account allows you to approve PRs created by the AI."
 echo ""
-echo "Steps:"
-echo "  1. Go to: https://github.com/settings/tokens?type=beta"
-echo "  2. Click 'Generate new token'"
-echo "  3. Set token name (e.g., 'gnarwall-devcontainer')"
-echo "  4. Set expiration (e.g., 90 days)"
-echo "  5. Under 'Repository access', select 'Only select repositories'"
-echo "     and choose 'tylerganter/gnarwall'"
-echo "  6. Under 'Permissions' > 'Repository permissions', set:"
-echo "     - Contents: Read and write (push/pull code)"
-echo "     - Issues: Read and write (create/comment/close issues)"
-echo "     - Pull requests: Read and write (create/review PRs)"
-echo "     - Metadata: Read-only (required, usually auto-selected)"
-echo "  7. Click 'Generate token' and copy it"
+echo "Prerequisites (see DEVCONTAINER.md):"
+echo "  - Bot GitHub account created and added as repo collaborator"
+echo "  - Fine-grained PAT created for the bot, scoped to this repo"
 echo ""
-echo "See DEVCONTAINER.md for security details and branch protection setup."
+echo "Token permissions needed:"
+echo "  - Contents: Read and write"
+echo "  - Issues: Read and write"
+echo "  - Pull requests: Read and write"
+echo "  - Metadata: Read-only"
 echo ""
-read -p "Press Enter when you have your token ready..."
+read -p "Press Enter when you have the bot's token ready..."
 echo ""
 
 echo "Paste your token below (input is hidden):"
@@ -50,8 +44,6 @@ echo "$token" | gh auth login --with-token
 echo ""
 if gh auth status &>/dev/null; then
     echo "GitHub CLI configured successfully!"
-    echo ""
-    echo "Note: This token only has access to the gnarwall repository."
 
     # Configure git to use gh for authentication
     echo "Setting up git credential helper..."
@@ -69,19 +61,19 @@ if gh auth status &>/dev/null; then
         fi
     fi
 
-    # Prompt for git identity if not configured
+    # Prompt for git identity if not configured (use bot account info)
     if [ -z "$(git config --global user.name)" ]; then
         echo ""
-        echo "=== Git Identity Setup ==="
-        read -p "Enter your name for git commits: " git_name
-        read -p "Enter your email for git commits: " git_email
+        echo "=== Git Identity Setup (for bot account) ==="
+        read -p "Enter the bot's name for git commits: " git_name
+        read -p "Enter the bot's email for git commits: " git_email
         git config --global user.name "$git_name"
         git config --global user.email "$git_email"
         echo "Git identity configured."
     fi
 
     echo ""
-    echo "You can now use 'gh' commands and git push/pull for gnarwall."
+    echo "Bot account configured. PRs created by the AI can now be approved by you."
 else
     echo "Authentication failed. Run 'gh-setup' to try again."
     exit 1
