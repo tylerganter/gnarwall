@@ -17,7 +17,7 @@ Replace the WordPress-exported site with a clean, maintainable static site. The 
 | Images (remaining) | ~1,967 | `docs/wp-content/uploads/` | NOT committed (564MB total) |
 | Original WordPress export | 6.3GB | `/workspace/gnarwall-export/` | NOT committed (reference only) |
 
-**Current branch**: `feature/post-template` (PR #16 pending)
+**Current branch**: `main`
 **GitHub Pages URL**: https://tylerganter.github.io/gnarwall/
 **GitHub Pages source**: `docs/` directory on `main` branch
 
@@ -122,10 +122,26 @@ Create clean HTML/CSS templates. User provides design direction.
 - Hide WordPress cruft (sharedaddy, jp-relatedposts, etc.)
 - Prev/next/home navigation
 
-### Checkpoint 2D: About Page
-- [ ] Create about page template
-- [ ] **Test locally**: Verify page renders correctly
-- [ ] **Commit**: All templates + CSS
+### Checkpoint 2D: About Page ✅
+- [x] Create about page template
+- [x] **Test locally**: Verify page renders correctly
+- [x] **Commit**: All templates + CSS
+
+**Results**:
+- `templates/about.html` - Jinja2 template for static pages
+- Centered page title, readable content area
+- Reuses post-content typography styles
+- Hides WordPress cruft
+
+---
+
+## Phase 2 Complete ✅
+
+All templates created:
+- `templates/index.html` - Homepage grid
+- `templates/post.html` - Individual posts
+- `templates/about.html` - Static pages
+- `docs/css/style.css` - All styles (~700 lines)
 
 ---
 
@@ -237,4 +253,4 @@ docs/
 
 ## Next Step
 
-**Phase 2, Checkpoint 2D**: Create about page template.
+**Phase 3, Checkpoint 3A**: Write build script to generate HTML from templates + JSON.
