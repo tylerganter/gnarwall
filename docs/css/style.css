@@ -1,0 +1,305 @@
+/* Base Reset & Variables */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg-color: #1a1a1a;
+    --text-color: #fff;
+    --text-muted: #aaa;
+    --accent-cyan: #00bcd4;
+    --accent-yellow: #ffeb3b;
+    --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --grid-gap: 4px;
+    --header-height: 60px;
+}
+
+/* Base Styles */
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-stack);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Header */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background-color: var(--bg-color);
+    z-index: 100;
+}
+
+.site-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-color);
+}
+
+/* Hamburger Menu Button */
+.menu-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hamburger {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--text-color);
+    position: relative;
+}
+
+.hamburger::before,
+.hamburger::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 24px;
+    height: 2px;
+    background-color: var(--text-color);
+}
+
+.hamburger::before {
+    top: -7px;
+}
+
+.hamburger::after {
+    top: 7px;
+}
+
+/* Navigation Overlay */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 200;
+}
+
+.nav-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.nav-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 2.5rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 5px;
+}
+
+.nav-menu {
+    list-style: none;
+    text-align: center;
+}
+
+.nav-menu li {
+    margin: 1.5rem 0;
+}
+
+.nav-menu a {
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-color);
+    transition: color 0.2s;
+}
+
+.nav-menu a:hover {
+    color: var(--accent-cyan);
+}
+
+/* Post Grid */
+.post-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--grid-gap);
+    padding-top: var(--header-height);
+}
+
+/* Post Card */
+.post-card {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+
+.post-card a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.post-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.3s ease;
+}
+
+.post-card:hover .post-image {
+    transform: scale(1.05);
+}
+
+.post-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.post-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    z-index: 1;
+}
+
+.post-date {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+.post-title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-color);
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 768px) {
+    .post-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .site-title {
+        font-size: 1rem;
+    }
+
+    .post-title {
+        font-size: 1.1rem;
+    }
+}
+
+/* Desktop: 3 columns */
+@media (min-width: 1024px) {
+    .post-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .site-title {
+        font-size: 1.1rem;
+    }
+
+    .post-info {
+        padding: 25px;
+    }
+
+    .post-date {
+        font-size: 0.8rem;
+    }
+
+    .post-title {
+        font-size: 1.2rem;
+    }
+}
+
+/* Hover tint effect */
+.post-card a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--accent-cyan);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+    mix-blend-mode: overlay;
+}
+
+.post-card:hover a::before {
+    opacity: 0.3;
+}
+
+/* Footer */
+.site-footer {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Utility: Screen Reader Only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
