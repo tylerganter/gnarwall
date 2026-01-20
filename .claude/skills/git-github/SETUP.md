@@ -61,7 +61,7 @@ The `main` branch should be protected with a GitHub Ruleset:
 GitHub App tokens expire after 1 hour. To refresh:
 
 ```bash
-.devcontainer/gh-app-token.sh | gh auth login --with-token
+.claude/skills/git-github/scripts/gh-app-token.sh | gh auth login --with-token
 ```
 
 ### Clear Credentials
