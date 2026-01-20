@@ -29,6 +29,7 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 a {
@@ -355,6 +356,7 @@ a {
     padding: 0 20px;
     font-size: 1.05rem;
     line-height: 1.8;
+    overflow-x: hidden;
 }
 
 @media (min-width: 768px) {
@@ -440,6 +442,23 @@ a {
     border-radius: 2px;
 }
 
+/* WordPress captions - override inline width styles */
+.post-content figure,
+.post-content .wp-caption {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 2em 0;
+}
+
+.post-content figcaption,
+.post-content .wp-caption-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 0.5em;
+    font-style: italic;
+}
+
 /* Full-width images break out of content column */
 .post-content > p > img,
 .post-content > img {
@@ -475,10 +494,10 @@ a {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 4px;
-    max-width: calc(100% + 40px);
+    max-width: calc(100% + 40px) !important;
     margin-left: -20px;
     margin-right: -20px;
-    width: calc(100% + 40px);
+    width: calc(100% + 40px) !important;
 }
 
 @media (min-width: 768px) {
@@ -494,6 +513,8 @@ a {
 .post-content .tiled-gallery .gallery-row,
 .post-content .tiled-gallery .gallery-group {
     display: contents;
+    width: auto !important;
+    height: auto !important;
 }
 
 .post-content .tiled-gallery .tiled-gallery-item {
