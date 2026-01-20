@@ -20,6 +20,23 @@ If authentication fails, see [SETUP.md](./SETUP.md) for one-time GitHub setup.
 
 **Never work directly on `main`.** The main branch is protected and requires PRs with approval. Always ensure you're on a feature branch before making changes.
 
+## The PR-Driven Workflow
+
+This environment uses a continuous PR workflow where the user reviews and merges PRs on GitHub:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  1. Sync with main (pull latest)                            │
+│  2. Create feature branch                                   │
+│  3. Do work, commit, push                                   │
+│  4. Create PR                                               │
+│  5. User reviews & merges on GitHub (branch auto-deleted)   │
+│  6. Return to step 1                                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Key insight**: After the user merges a PR, the feature branch is automatically deleted. When starting new work, always check if your current branch still exists and sync with main.
+
 ### Proactive Behavior
 
 When on a non-main branch, be **permissive and proactive** about:
@@ -29,21 +46,63 @@ When on a non-main branch, be **permissive and proactive** about:
 
 Don't wait to be asked—if you've made meaningful changes on a feature branch, commit and push them.
 
-## Branch Management
+## Starting a New Task
 
-### Before Starting Work
-
-Always verify you're not on main:
+**Always run this check when beginning work**, especially after a PR may have been merged:
 
 ```bash
-git branch --show-current
+# Fetch latest and prune deleted remote branches
+git fetch --prune
+
+# Check current branch status
+git branch -vv | head -5
 ```
 
-If on main, create and switch to a feature branch immediately:
+### If Your Branch Was Merged and Deleted
+
+The output will show `[origin/branch: gone]` for branches deleted on remote:
+
+```
+* feature/old-task  abc1234 [origin/feature/old-task: gone] Last commit msg
+  main              def5678 [origin/main] Some commit
+```
+
+**Recovery steps:**
 
 ```bash
+# Switch to main and pull latest (includes your merged changes)
+git checkout main
+git pull
+
+# Delete the stale local branch
+git branch -d feature/old-task
+
+# Create a new branch for the next task
+git checkout -b feature/next-task
+```
+
+### If You're on Main
+
+```bash
+# Pull latest changes first
+git pull
+
+# Create a new feature branch
 git checkout -b feature/descriptive-name
 ```
+
+### If Your Branch Still Exists (PR Open or In Review)
+
+Continue working on the existing branch. If addressing review feedback:
+
+```bash
+# Make changes, then commit and push
+git add -A && git commit -m "Address review feedback
+
+Co-Authored-By: Claude <noreply@anthropic.com>" && git push
+```
+
+## Branch Management
 
 ### Branch Naming Conventions
 
@@ -57,8 +116,8 @@ Use prefixes to indicate the type of work:
 ### Switching Branches
 
 ```bash
-# List all branches
-git branch -a
+# List all branches (shows tracking status)
+git branch -vv
 
 # Switch to existing branch
 git checkout branch-name
@@ -110,20 +169,15 @@ git push -u origin $(git branch --show-current)
 git push
 ```
 
-### Complete Workflow: Commit and Push
+### Quick Reference: Commit and Push
 
 ```bash
-# Verify not on main
-git branch --show-current
-
-# If on main, create feature branch first
-# git checkout -b feature/my-feature
-
-# Stage, commit, and push
 git add -A && git commit -m "Description of changes
 
-Co-Authored-By: Claude <noreply@anthropic.com>" && git push -u origin $(git branch --show-current)
+Co-Authored-By: Claude <noreply@anthropic.com>" && git push
 ```
+
+Use `git push -u origin $(git branch --show-current)` for the first push of a new branch.
 
 ## Creating Pull Requests
 
