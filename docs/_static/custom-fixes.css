@@ -1,0 +1,45 @@
+/* Custom fixes for static site migration */
+
+/* Fix Task 3: Image cropping on homepage/blog thumbnails
+ * WordPress used server-side cropping via URL params (?w=980&h=980&crop=1)
+ * Now we need CSS object-fit to crop non-square images to fill the square container
+ */
+.home .entry-thumbnail img,
+.blog .entry-thumbnail img,
+.archive .entry-thumbnail img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+/* Ensure the entry-thumbnail container has proper dimensions for object-fit to work */
+.home .entry-thumbnail,
+.blog .entry-thumbnail,
+.archive .entry-thumbnail {
+    overflow: hidden;
+}
+
+/* Fix Task 2: Scrolling issue on homepage
+ * The theme may have overflow restrictions that block scrolling past visible posts
+ * Override to ensure page scrolls normally
+ */
+html, body {
+    overflow-x: hidden;
+    overflow-y: auto !important;
+    height: auto !important;
+}
+
+.home #page,
+.blog #page,
+.home .site-content,
+.blog .site-content {
+    overflow: visible !important;
+    height: auto !important;
+}
+
+/* Ensure the main content area doesn't have fixed height */
+.home .site-main,
+.blog .site-main {
+    overflow: visible !important;
+    min-height: auto !important;
+}
