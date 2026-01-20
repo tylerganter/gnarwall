@@ -56,15 +56,20 @@ These protections are enforced by GitHub's servers and cannot be circumvented by
 
 ### Setting Up Branch Protection
 
-To protect the `main` branch:
+To protect the `main` branch using GitHub Rulesets:
 
-1. Go to: `https://github.com/tylerganter/gnarwall/settings/branches`
-2. Click **Add branch ruleset** or **Add rule**
-3. Set **Branch name pattern**: `main`
-4. Enable these protections:
+1. Go to: `https://github.com/tylerganter/gnarwall/settings/rules`
+2. Click **New ruleset** → **New branch ruleset**
+3. Configure the ruleset:
+   - **Ruleset name**: `main` (or any descriptive name)
+   - **Enforcement status**: **Active** (critical—disabled rulesets don't protect anything)
+   - **Target branches**: Click **Add target** → **Include default branch**
+4. Under **Rules**, enable:
    - **Require a pull request before merging** ✓
-     - **Require approvals**: 1
-   - **Do not allow bypassing the above settings** ✓
+     - **Required approvals**: 1
+   - **Block force pushes** ✓
+5. Ensure **Bypass list** is empty (or contains only trusted admins)
+6. Click **Create**
 
 With this configuration, all changes to `main` must go through a pull request that you approve. The AI can create branches, push code, and open PRs, but cannot merge without your explicit approval.
 
