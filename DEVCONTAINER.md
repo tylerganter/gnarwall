@@ -32,9 +32,18 @@ claude
 claude-yolo
 ```
 
+## Bot Account Setup (One-Time)
+
+A separate GitHub "bot" account is used so you can approve PRs created by the AI (GitHub doesn't allow approving your own PRs).
+
+1. Create a GitHub account with an email alias (e.g., `yourname+bot@gmail.com`)
+2. Add the bot as a collaborator with **Write** access to this repo
+3. Create a fine-grained PAT for the bot (scoped to this repo only)
+4. Run `gh-setup` inside the container and paste the bot's token
+
 ## GitHub Setup
 
-Run `gh-setup` inside the container and follow the prompts to configure GitHub CLI access.
+Run `gh-setup` inside the container and paste the **bot account's token** when prompted.
 
 ### Security Model
 
@@ -70,7 +79,7 @@ With this configuration, all changes to `main` must go through a pull request th
 
 ### Token Permissions
 
-The `gh-setup` script guides you through creating a fine-grained PAT with these permissions:
+The bot account's fine-grained PAT needs these permissions (scoped to this repo only):
 
 | Permission | Access Level | Enables |
 |------------|--------------|---------|

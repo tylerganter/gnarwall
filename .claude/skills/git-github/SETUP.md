@@ -2,6 +2,10 @@
 
 This guide covers one-time setup for GitHub access in the gnarwall devcontainer.
 
+## Bot Account
+
+The container uses a separate "bot" GitHub account so the human owner can approve PRs created by the AI. See `DEVCONTAINER.md` for bot account creation steps.
+
 ## Quick Start
 
 Authenticate using the `gh-setup` command:
@@ -10,7 +14,7 @@ Authenticate using the `gh-setup` command:
 gh-setup
 ```
 
-This configures a **fine-grained Personal Access Token (PAT)** with repository-scoped access. The token is stored in a persistent Docker volume at `~/.config/gh/`.
+Paste the **bot account's fine-grained PAT** when prompted. The token is stored in a persistent Docker volume at `~/.config/gh/`.
 
 ## Token Permissions
 
