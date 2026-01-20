@@ -4,7 +4,14 @@ This document explains how GitHub authentication and access control work in the 
 
 ## The Problem
 
-When an AI creates a pull request using your credentials, GitHub considers it "your" PR—and you can't approve your own PRs. We need a way for the AI to have its own identity.
+We want Claude Code to run autonomously with full access to the `gh` CLI—creating branches, pushing code, opening PRs, and managing issues—without risking catastrophic changes to the repository.
+
+The key constraints:
+1. **Prevent direct changes to protected branches** — The AI should never be able to push directly to `main` or delete important branches
+2. **Require human review** — All code changes must go through PRs that a human approves and merges
+3. **Limit blast radius** — Even if something goes wrong, the damage should be recoverable
+
+There's also a practical issue: when an AI creates a PR using your credentials, GitHub considers it "your" PR—and you can't approve your own PRs. We need the AI to have its own identity.
 
 ## The Solution: GitHub App
 
