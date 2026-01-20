@@ -1,7 +1,6 @@
 ---
 name: git-github
 description: Git and GitHub workflows for the gnarwall devcontainer. Use when working with git operations, creating branches, committing code, pushing changes, opening PRs, or managing issues. Activates automatically when code changes need to be committed or pushed.
-allowed-tools: Bash, Read, Grep, Glob
 ---
 
 # Git & GitHub Workflow
