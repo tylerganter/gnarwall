@@ -12,6 +12,10 @@ import re
 from datetime import datetime
 from pathlib import Path
 
+# Base URL for GitHub Pages (site is at tylerganter.github.io/gnarwall/)
+# Set to empty string for local development
+BASE_URL = '/gnarwall'
+
 
 class SimpleTemplate:
     """
@@ -129,9 +133,23 @@ def ensure_dir(path):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
 
 
-def generate_homepage(template, posts, output_dir, year):
+def fix_content_paths(html, base_url):
+    """Add base_url prefix to absolute paths in content HTML"""
+    if not base_url:
+        return html
+
+    # Fix image src paths: src="/wp-content/... -> src="/gnarwall/wp-content/...
+    html = re.sub(r'src="(/wp-content/)', f'src="{base_url}\\1', html)
+
+    # Fix any other absolute paths that might exist
+    html = re.sub(r'href="(/wp-content/)', f'href="{base_url}\\1', html)
+
+    return html
+
+
+def generate_homepage(template, posts, output_dir, year, base_url):
     """Generate the homepage with post grid"""
-    html = template.render(posts=posts, year=year)
+    html = template.render(posts=posts, year=year, base_url=base_url)
     output_path = os.path.join(output_dir, 'index.html')
 
     with open(output_path, 'w', encoding='utf-8') as f:
@@ -140,18 +158,23 @@ def generate_homepage(template, posts, output_dir, year):
     print(f"Generated: {output_path}")
 
 
-def generate_post_pages(template, posts, output_dir, year):
+def generate_post_pages(template, posts, output_dir, year, base_url):
     """Generate individual post pages"""
     for i, post in enumerate(posts):
         # Determine prev/next posts (posts are in reverse chronological order)
         prev_post = posts[i - 1] if i > 0 else None
         next_post = posts[i + 1] if i < len(posts) - 1 else None
 
+        # Fix paths in content HTML
+        post_copy = post.copy()
+        post_copy['content_html'] = fix_content_paths(post['content_html'], base_url)
+
         html = template.render(
-            post=post,
+            post=post_copy,
             prev_post=prev_post,
             next_post=next_post,
-            year=year
+            year=year,
+            base_url=base_url
         )
 
         # Output to docs/YYYY/MM/DD/slug/index.html
@@ -164,9 +187,13 @@ def generate_post_pages(template, posts, output_dir, year):
         print(f"Generated: {output_path}")
 
 
-def generate_about_page(template, page, output_dir, year):
+def generate_about_page(template, page, output_dir, year, base_url):
     """Generate the about page"""
-    html = template.render(page=page, year=year)
+    # Fix paths in content HTML
+    page_copy = page.copy()
+    page_copy['content_html'] = fix_content_paths(page['content_html'], base_url)
+
+    html = template.render(page=page_copy, year=year, base_url=base_url)
     output_path = os.path.join(output_dir, 'about', 'index.html')
     ensure_dir(output_path)
 
@@ -202,17 +229,17 @@ def main():
 
     # Generate homepage
     print("\nGenerating homepage...")
-    generate_homepage(index_template, posts, output_dir, year)
+    generate_homepage(index_template, posts, output_dir, year, BASE_URL)
 
     # Generate post pages
     print(f"\nGenerating {len(posts)} post pages...")
-    generate_post_pages(post_template, posts, output_dir, year)
+    generate_post_pages(post_template, posts, output_dir, year, BASE_URL)
 
     # Generate about page
     print("\nGenerating about page...")
     about_page = next((p for p in pages if p['slug'] == 'about'), None)
     if about_page:
-        generate_about_page(about_template, about_page, output_dir, year)
+        generate_about_page(about_template, about_page, output_dir, year, BASE_URL)
     else:
         print("Warning: No about page found in content.json")
 
