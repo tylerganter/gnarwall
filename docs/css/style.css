@@ -303,3 +303,327 @@ a {
     white-space: nowrap;
     border: 0;
 }
+
+/* ==========================================================================
+   Post Page Styles
+   ========================================================================== */
+
+/* Post Article */
+.post {
+    padding-top: calc(var(--header-height) + 40px);
+    padding-bottom: 40px;
+}
+
+/* Post Header */
+.post-header {
+    text-align: center;
+    padding: 0 20px 40px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.post-header-date {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+}
+
+.post-header-title {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-color);
+}
+
+@media (min-width: 768px) {
+    .post-header {
+        padding: 0 40px 60px;
+    }
+
+    .post-header-title {
+        font-size: 2.5rem;
+    }
+}
+
+/* Post Content */
+.post-content {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 20px;
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+@media (min-width: 768px) {
+    .post-content {
+        padding: 0 40px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Content Elements */
+.post-content p {
+    margin-bottom: 1.5em;
+}
+
+.post-content a {
+    color: var(--accent-cyan);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.post-content a:hover {
+    color: #fff;
+}
+
+.post-content strong,
+.post-content b {
+    font-weight: 600;
+}
+
+.post-content em,
+.post-content i {
+    font-style: italic;
+}
+
+/* Headings in content */
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.post-content h2 {
+    font-size: 1.5rem;
+}
+
+.post-content h3 {
+    font-size: 1.25rem;
+}
+
+/* Lists */
+.post-content ul,
+.post-content ol {
+    margin-bottom: 1.5em;
+    padding-left: 1.5em;
+}
+
+.post-content li {
+    margin-bottom: 0.5em;
+}
+
+/* Blockquotes */
+.post-content blockquote {
+    margin: 2em 0;
+    padding: 1em 1.5em;
+    border-left: 4px solid var(--accent-cyan);
+    background-color: rgba(255, 255, 255, 0.05);
+    font-style: italic;
+}
+
+.post-content blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Images */
+.post-content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 2em auto;
+    border-radius: 2px;
+}
+
+/* Full-width images break out of content column */
+.post-content > p > img,
+.post-content > img {
+    max-width: calc(100% + 40px);
+    margin-left: -20px;
+    margin-right: -20px;
+    width: calc(100% + 40px);
+}
+
+@media (min-width: 768px) {
+    .post-content > p > img,
+    .post-content > img {
+        max-width: calc(100% + 200px);
+        margin-left: -100px;
+        margin-right: -100px;
+        width: calc(100% + 200px);
+    }
+}
+
+@media (min-width: 1200px) {
+    .post-content > p > img,
+    .post-content > img {
+        max-width: 1000px;
+        margin-left: calc((700px - 1000px) / 2);
+        margin-right: calc((700px - 1000px) / 2);
+        width: 1000px;
+    }
+}
+
+/* WordPress Tiled Galleries - Simplified */
+.post-content .tiled-gallery {
+    margin: 2em 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    max-width: calc(100% + 40px);
+    margin-left: -20px;
+    margin-right: -20px;
+    width: calc(100% + 40px);
+}
+
+@media (min-width: 768px) {
+    .post-content .tiled-gallery {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: calc(100% + 200px);
+        margin-left: -100px;
+        margin-right: -100px;
+        width: calc(100% + 200px);
+    }
+}
+
+.post-content .tiled-gallery .gallery-row,
+.post-content .tiled-gallery .gallery-group {
+    display: contents;
+}
+
+.post-content .tiled-gallery .tiled-gallery-item {
+    display: block;
+}
+
+.post-content .tiled-gallery .tiled-gallery-item a {
+    display: block;
+}
+
+.post-content .tiled-gallery .tiled-gallery-item img {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    display: block;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+/* Hide WordPress cruft */
+.post-content .sharedaddy,
+.post-content .sd-sharing-enabled,
+.post-content .jp-relatedposts,
+.post-content .jetpack-likes-widget-wrapper {
+    display: none !important;
+}
+
+/* Strip WordPress span classes but keep text */
+.post-content .p1,
+.post-content .s1 {
+    all: unset;
+}
+
+/* Dual-author colored text */
+.post-content .tyler,
+.post-content [style*="color: #00bcd4"],
+.post-content [style*="color:#00bcd4"] {
+    color: var(--accent-cyan);
+}
+
+.post-content .kristina,
+.post-content [style*="color: #ffeb3b"],
+.post-content [style*="color:#ffeb3b"] {
+    color: var(--accent-yellow);
+}
+
+/* Post Navigation */
+.post-nav {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    max-width: 900px;
+    margin: 60px auto 0;
+    padding: 0 20px;
+    gap: 20px;
+}
+
+.post-nav-link {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    text-decoration: none;
+}
+
+.post-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.post-nav-prev {
+    text-align: left;
+}
+
+.post-nav-next {
+    text-align: right;
+}
+
+.post-nav-disabled {
+    visibility: hidden;
+}
+
+.post-nav-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.post-nav-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-color);
+    line-height: 1.3;
+}
+
+.post-nav-home {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: var(--text-muted);
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+
+.post-nav-home:hover {
+    color: var(--accent-cyan);
+}
+
+@media (max-width: 600px) {
+    .post-nav {
+        flex-direction: column;
+    }
+
+    .post-nav-prev,
+    .post-nav-next {
+        text-align: center;
+    }
+
+    .post-nav-home {
+        order: -1;
+        padding: 10px;
+    }
+
+    .post-nav-disabled {
+        display: none;
+    }
+}
