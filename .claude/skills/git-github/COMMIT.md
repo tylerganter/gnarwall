@@ -16,7 +16,7 @@ git commit -m "Brief summary of changes
 
 Optional longer description of why.
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ```
 
 ### Commit Message Guidelines
@@ -41,7 +41,7 @@ git push
 ```bash
 git add -A && git commit -m "Description
 
-Co-Authored-By: Claude <noreply@anthropic.com>" && git push
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>" && git push
 ```
 
 ## Creating Pull Requests
@@ -74,7 +74,7 @@ When the user has left comments on a PR:
 # Make changes, then commit and push to the same branch
 git add -A && git commit -m "Address review feedback
 
-Co-Authored-By: Claude <noreply@anthropic.com>" && git push
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>" && git push
 ```
 
 The PR updates automatically when you push to the branch.

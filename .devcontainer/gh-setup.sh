@@ -94,8 +94,8 @@ echo "$installation_id" > "$CREDENTIALS_DIR/installation-id"
 echo ""
 echo "Generating installation access token..."
 
-# Generate token using the helper script
-token=$("$SCRIPT_DIR/gh-app-token.sh")
+# Generate token using the helper script (located in git-github skill)
+token=$("$REPO_ROOT/.claude/skills/git-github/scripts/gh-app-token.sh")
 
 if [ -z "$token" ]; then
     echo "Failed to generate token. Check your credentials."
@@ -150,7 +150,7 @@ if gh auth status &>/dev/null; then
     echo "GitHub App configured! PRs created by the AI can now be approved by you."
     echo ""
     echo "Note: GitHub App tokens expire after 1 hour."
-    echo "Run 'gh-app-token.sh' to refresh your token, or run 'gh-setup' again."
+    echo "Claude will refresh the token automatically when needed."
 else
     echo "Authentication failed. Run 'gh-setup' to try again."
     exit 1

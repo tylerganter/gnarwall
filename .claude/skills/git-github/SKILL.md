@@ -1,7 +1,6 @@
 ---
 name: git-github
 description: Git and GitHub workflows for the gnarwall devcontainer. Use when working with git operations, creating branches, committing code, pushing changes, opening PRs, or managing issues. Activates automatically when code changes need to be committed or pushed.
-allowed-tools: Bash, Read, Grep, Glob
 ---
 
 # Git & GitHub Workflow
@@ -19,7 +18,7 @@ If authentication fails, see [SETUP.md](./SETUP.md) for one-time setup.
 GitHub App tokens expire after **1 hour**. If you see authentication errors during a session, refresh the token:
 
 ```bash
-.devcontainer/gh-app-token.sh | gh auth login --with-token
+.claude/skills/git-github/scripts/gh-app-token.sh | gh auth login --with-token
 ```
 
 This regenerates the token using the stored app credentials. Run `gh-setup` only for initial setup or to reconfigure credentials.
