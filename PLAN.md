@@ -17,7 +17,7 @@ Replace the WordPress-exported site with a clean, maintainable static site. The 
 | Images (remaining) | ~1,967 | `docs/wp-content/uploads/` | NOT committed (564MB total) |
 | Original WordPress export | 6.3GB | `/workspace/gnarwall-export/` | NOT committed (reference only) |
 
-**Current branch**: `feature/homepage-thumbnails`
+**Current branch**: `feature/post-template` (PR #16 pending)
 **GitHub Pages URL**: https://tylerganter.github.io/gnarwall/
 **GitHub Pages source**: `docs/` directory on `main` branch
 
@@ -82,25 +82,45 @@ Extract structured data from the WordPress HTML files.
 
 Create clean HTML/CSS templates. User provides design direction.
 
-### Checkpoint 2A: Design Input
-- [ ] User provides screenshots or description of desired look
-- [ ] Confirm layout preferences (grid vs list, sidebar vs no sidebar, etc.)
-- [ ] Choose typography (Google Fonts, system fonts, or self-hosted)
-- [ ] **Review**: Agree on design direction before coding
+### Checkpoint 2A: Design Input ✅
+- [x] User provides screenshots or description of desired look
+- [x] Confirm layout preferences (grid vs list, sidebar vs no sidebar, etc.)
+- [x] Choose typography (Google Fonts, system fonts, or self-hosted)
+- [x] **Review**: Agree on design direction before coding
 
-### Checkpoint 2B: Homepage Template
-- [ ] Create `templates/index.html` with post grid layout
-- [ ] Write CSS for responsive grid (mobile-first)
-- [ ] Add site header, navigation, footer
-- [ ] **Test locally**: `python3 -m http.server` with dummy data
-- [ ] **Review**: Human approval of homepage look
+**Results**: See [DESIGN.md](DESIGN.md) for full design notes.
+- Layout: Grid (3/2/1 columns responsive)
+- Typography: System fonts
+- Dual-author colors: Keep (cyan/yellow)
 
-### Checkpoint 2C: Post Template
-- [ ] Create `templates/post.html` for individual posts
-- [ ] Style for readable long-form content with images
-- [ ] Navigation: prev/next post, back to home
-- [ ] **Test locally**: Verify with sample post content
-- [ ] **Review**: Human approval of post layout
+### Checkpoint 2B: Homepage Template ✅
+- [x] Create `templates/index.html` with post grid layout
+- [x] Write CSS for responsive grid (mobile-first)
+- [x] Add site header, navigation, footer
+- [x] **Test locally**: `python3 -m http.server` with dummy data
+- [x] **Review**: Human approval of homepage look
+
+**Results**:
+- `templates/index.html` - Jinja2 template for site generator
+- `docs/css/style.css` - Responsive CSS (~4KB)
+- Dark theme, hamburger menu, hover effects implemented
+
+### Checkpoint 2C: Post Template ✅
+- [x] Create `templates/post.html` for individual posts
+- [x] Style for readable long-form content with images
+- [x] Navigation: prev/next post, back to home
+- [x] **Test locally**: Verify with sample post content
+- [x] **Review**: Human approval of post layout
+
+**Results**:
+- `templates/post.html` - Jinja2 template for individual posts
+- Post header with centered date and title
+- Content area with max-width 700px, readable typography
+- Full-width images that extend beyond content column
+- WordPress tiled gallery support (CSS grid)
+- Dual-author colored text (Tyler=cyan, Kristina=yellow)
+- Hide WordPress cruft (sharedaddy, jp-relatedposts, etc.)
+- Prev/next/home navigation
 
 ### Checkpoint 2D: About Page
 - [ ] Create about page template
@@ -201,7 +221,7 @@ docs/
 
 - **Local server**: `cd /workspace/docs && python3 -m http.server 8000`
 - **GitHub repo**: https://github.com/tylerganter/gnarwall
-- **Current branch**: `feature/homepage-thumbnails` (will continue here or create new branch)
+- **Current branch**: `main` (create feature branches for new work)
 - **Build tools**: Python 3 + BeautifulSoup for extraction/generation (no npm/node required)
 
 ---
@@ -217,4 +237,4 @@ docs/
 
 ## Next Step
 
-**Phase 1, Checkpoint 1A**: Write content extraction script to parse existing WordPress HTML and extract structured post data.
+**Phase 2, Checkpoint 2D**: Create about page template.

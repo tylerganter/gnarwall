@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - Adventures of Gallivanter Ganter</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <a href="/" class="site-title">Adventures of Gallivanter Ganter</a>
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+            <span class="hamburger"></span>
+        </button>
+    </header>
+
+    <nav class="nav-overlay" aria-hidden="true">
+        <button class="nav-close" aria-label="Close menu">&times;</button>
+        <ul class="nav-menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="https://tylerganter.com" target="_blank" rel="noopener">Professional Website</a></li>
+        </ul>
+    </nav>
+
+    <article class="post">
+        <header class="post-header">
+            <time class="post-header-date" datetime="{{ post.date_iso }}">{{ post.date_display }}</time>
+            <h1 class="post-header-title">{{ post.title }}</h1>
+        </header>
+
+        <div class="post-content">
+            {{ post.content_html }}
+        </div>
+
+        <nav class="post-nav">
+            {% if prev_post %}
+            <a href="/{{ prev_post.slug }}/" class="post-nav-link post-nav-prev">
+                <span class="post-nav-label">Previous</span>
+                <span class="post-nav-title">{{ prev_post.title }}</span>
+            </a>
+            {% else %}
+            <span class="post-nav-link post-nav-prev post-nav-disabled"></span>
+            {% endif %}
+
+            <a href="/" class="post-nav-home" aria-label="Back to home">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+            </a>
+
+            {% if next_post %}
+            <a href="/{{ next_post.slug }}/" class="post-nav-link post-nav-next">
+                <span class="post-nav-label">Next</span>
+                <span class="post-nav-title">{{ next_post.title }}</span>
+            </a>
+            {% else %}
+            <span class="post-nav-link post-nav-next post-nav-disabled"></span>
+            {% endif %}
+        </nav>
+    </article>
+
+    <footer class="site-footer">
+        <p>&copy; {{ year }} Adventures of Gallivanter Ganter</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navOverlay = document.querySelector('.nav-overlay');
+        const navClose = document.querySelector('.nav-close');
+
+        function openMenu() {
+            navOverlay.classList.add('open');
+            navOverlay.setAttribute('aria-hidden', 'false');
+            menuToggle.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            navOverlay.classList.remove('open');
+            navOverlay.setAttribute('aria-hidden', 'true');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        menuToggle.addEventListener('click', openMenu);
+        navClose.addEventListener('click', closeMenu);
+        navOverlay.addEventListener('click', function(e) {
+            if (e.target === navOverlay) closeMenu();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navOverlay.classList.contains('open')) {
+                closeMenu();
+            }
+        });
+    </script>
+</body>
+</html>
