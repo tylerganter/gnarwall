@@ -197,8 +197,8 @@ a {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 50%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+    height: 60px;
+    background: rgba(0, 0, 0, 0.4);
     pointer-events: none;
 }
 
@@ -207,24 +207,30 @@ a {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 20px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 15px;
     z-index: 1;
+    text-align: center;
 }
 
 .post-date {
     display: block;
-    font-size: 0.75rem;
-    color: var(--text-muted);
+    font-size: 0.7rem;
+    color: #fff;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.2rem;
 }
 
 .post-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     line-height: 1.3;
-    color: var(--text-color);
+    color: #fff;
+    text-transform: uppercase;
 }
 
 /* Tablet: 2 columns */
