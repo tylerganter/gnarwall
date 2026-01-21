@@ -519,12 +519,9 @@ a {
     margin-right: auto;
 }
 
-/* WordPress Tiled Galleries - Clean uniform grid */
+/* WordPress Tiled Galleries - Preserve row/group structure */
 .post-content .tiled-gallery {
     margin: 2em 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
     max-width: calc(100% + 40px);
     margin-left: -20px;
     margin-right: -20px;
@@ -533,7 +530,6 @@ a {
 
 @media (min-width: 768px) {
     .post-content .tiled-gallery {
-        grid-template-columns: repeat(3, 1fr);
         max-width: calc(100% + 200px);
         margin-left: -100px;
         margin-right: -100px;
@@ -541,26 +537,41 @@ a {
     }
 }
 
-@media (min-width: 1200px) {
-    .post-content .tiled-gallery {
-        grid-template-columns: repeat(4, 1fr);
-    }
+/* Gallery rows - horizontal flex container */
+.post-content .tiled-gallery .gallery-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 4px;
+    width: 100% !important;
+    height: auto !important;
 }
 
-/* Flatten WordPress gallery structure */
-.post-content .tiled-gallery .gallery-row,
-.post-content .tiled-gallery .gallery-group,
+/* Gallery groups - flex items using WordPress-calculated proportions */
+.post-content .tiled-gallery .gallery-group {
+    flex: var(--flex-grow, 1) 1 0%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* Gallery items - contain image + caption */
 .post-content .tiled-gallery .tiled-gallery-item {
-    display: contents;
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
 }
 
-/* Gallery images: uniform aspect ratio with cropping */
+/* Images - fill container, use WordPress aspect ratio */
 .post-content .tiled-gallery img {
     width: 100%;
-    aspect-ratio: 4 / 3;
+    height: 100%;
+    object-fit: cover;
     margin: 0;
     display: block;
-    object-fit: cover;
     cursor: pointer;
     transition: opacity 0.2s;
 }
@@ -569,9 +580,42 @@ a {
     opacity: 0.85;
 }
 
+/* Captions - hidden by default, show on hover */
+.post-content .tiled-gallery .tiled-gallery-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+}
+
+.post-content .tiled-gallery .tiled-gallery-item:hover .tiled-gallery-caption {
+    opacity: 1;
+}
+
 /* Lightbox link styling in galleries */
 .post-content .tiled-gallery a.glightbox {
     display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Mobile: stack into simpler 2-column grid */
+@media (max-width: 480px) {
+    .post-content .tiled-gallery .gallery-row {
+        flex-wrap: wrap;
+    }
+    .post-content .tiled-gallery .gallery-group {
+        flex: 1 1 calc(50% - 2px);
+        min-width: calc(50% - 2px);
+    }
 }
 
 /* Hide WordPress cruft */

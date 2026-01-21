@@ -170,6 +170,42 @@ def classify_standalone_images(html):
     return re.sub(r'<img[^>]+>', process_img, html)
 
 
+def process_gallery_flex_widths(html):
+    """Convert WordPress pixel widths to CSS custom properties for flex layout.
+
+    WordPress galleries have inline styles like:
+        style="width: 490px; height: 369px"
+
+    This function adds a --flex-grow custom property based on the width,
+    which CSS uses to maintain proportional widths responsively.
+    """
+    def process_gallery_group(match):
+        tag = match.group(0)
+
+        # Extract width from style attribute
+        width_match = re.search(r'style="[^"]*width:\s*(\d+)px', tag)
+        if not width_match:
+            return tag
+
+        width = int(width_match.group(1))
+
+        # Add --flex-grow as CSS custom property (divide by 100 for cleaner numbers)
+        flex_grow = width / 100
+
+        # Insert --flex-grow into the style attribute
+        tag = re.sub(
+            r'style="',
+            f'style="--flex-grow: {flex_grow:.2f}; ',
+            tag
+        )
+        return tag
+
+    # Process gallery-group divs
+    html = re.sub(r'<div class="gallery-group[^"]*"[^>]*>', process_gallery_group, html)
+
+    return html
+
+
 def wrap_images_for_lightbox(html):
     """Wrap images with <a class="glightbox"> links for lightbox functionality.
 
@@ -217,6 +253,9 @@ def fix_content_paths(html, base_url):
     # Strip WordPress query parameters from image URLs (e.g., ?w=768, ?h=1024)
     # These are URL-encoded as %3Fw=768 etc
     html = re.sub(r'(src="[^"]+\.(jpg|jpeg|png|gif))(%3F[^"]*|(\?[^"]*))"', r'\1"', html, flags=re.IGNORECASE)
+
+    # Process gallery flex widths for proportional layout
+    html = process_gallery_flex_widths(html)
 
     # Classify standalone images as landscape/portrait
     html = classify_standalone_images(html)
