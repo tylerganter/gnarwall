@@ -820,3 +820,28 @@ a {
     display: block;
     text-decoration: none;
 }
+
+/* GLightbox description styling */
+.gslide-description {
+    background: rgba(0, 0, 0, 0.8) !important;
+    text-align: center;
+}
+
+.gslide-description .gdesc-inner {
+    padding: 15px 20px;
+}
+
+.gslide-description .gslide-title {
+    color: #fff !important;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.gslide-description .gslide-desc {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: center;
+}
