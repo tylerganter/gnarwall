@@ -6,6 +6,7 @@
     <title>{{ post.title }} - Adventures of Gallivanter Ganter</title>
     <link rel="icon" href="{{ base_url }}/favicon.png" type="image/png">
     <link rel="stylesheet" href="{{ base_url }}/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 </head>
 <body>
     <header class="site-header">
@@ -95,6 +96,15 @@
             if (e.key === 'Escape' && navOverlay.classList.contains('open')) {
                 closeMenu();
             }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script>
+        const lightbox = GLightbox({
+            selector: '.glightbox',
+            touchNavigation: true,
+            loop: true,
+            preload: false
         });
     </script>
 </body>
