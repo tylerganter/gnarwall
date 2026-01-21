@@ -133,6 +133,43 @@ def ensure_dir(path):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
 
 
+def classify_standalone_images(html):
+    """Add img-landscape or img-portrait class to standalone images based on aspect ratio.
+
+    Only processes images with 'alignnone size-full' class (standalone images),
+    not gallery images which have empty class="".
+    """
+    def process_img(match):
+        img_tag = match.group(0)
+
+        # Only process standalone images (alignnone size-full), not gallery images
+        if 'alignnone size-full' not in img_tag:
+            return img_tag
+
+        # Extract data-orig-size="width,height"
+        size_match = re.search(r'data-orig-size="(\d+),(\d+)"', img_tag)
+        if not size_match:
+            return img_tag
+
+        width, height = int(size_match.group(1)), int(size_match.group(2))
+        if height == 0:
+            return img_tag
+
+        ratio = width / height
+
+        # Classify based on aspect ratio
+        if ratio >= 1.0:
+            orientation_class = 'img-landscape'
+        else:
+            orientation_class = 'img-portrait'
+
+        # Add class to existing class attribute
+        img_tag = re.sub(r'class="([^"]*)"', rf'class="\1 {orientation_class}"', img_tag)
+        return img_tag
+
+    return re.sub(r'<img[^>]+>', process_img, html)
+
+
 def wrap_images_for_lightbox(html):
     """Wrap images with <a class="glightbox"> links for lightbox functionality.
 
@@ -180,6 +217,9 @@ def fix_content_paths(html, base_url):
     # Strip WordPress query parameters from image URLs (e.g., ?w=768, ?h=1024)
     # These are URL-encoded as %3Fw=768 etc
     html = re.sub(r'(src="[^"]+\.(jpg|jpeg|png|gif))(%3F[^"]*|(\?[^"]*))"', r'\1"', html, flags=re.IGNORECASE)
+
+    # Classify standalone images as landscape/portrait
+    html = classify_standalone_images(html)
 
     # Wrap images with lightbox links
     html = wrap_images_for_lightbox(html)

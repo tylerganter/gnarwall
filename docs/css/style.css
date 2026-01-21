@@ -356,7 +356,6 @@ a {
     padding: 0 20px;
     font-size: 1.05rem;
     line-height: 1.8;
-    overflow-x: hidden;
 }
 
 @media (min-width: 768px) {
@@ -489,33 +488,35 @@ a {
     background: rgba(255, 255, 255, 0.03);
 }
 
-/* Full-width images break out of content column */
-.post-content > p > img,
-.post-content > img {
-    max-width: calc(100% + 40px);
-    margin-left: -20px;
-    margin-right: -20px;
-    width: calc(100% + 40px);
+/* Standalone landscape images: max-height with breakout width */
+.post-content img.img-landscape {
+    max-height: 60vh;
+    width: auto;
+    max-width: none;
+    margin-left: 50%;
+    transform: translateX(-50%);
 }
 
-@media (min-width: 768px) {
-    .post-content > p > img,
-    .post-content > img {
-        max-width: calc(100% + 200px);
-        margin-left: -100px;
-        margin-right: -100px;
-        width: calc(100% + 200px);
+/* Constrain landscape images to viewport width on small screens */
+@media (max-width: 767px) {
+    .post-content img.img-landscape {
+        max-width: 100vw;
+        margin-left: -20px;
+        margin-right: -20px;
+        transform: none;
+        width: calc(100% + 40px);
+        height: auto;
+        max-height: none;
     }
 }
 
-@media (min-width: 1200px) {
-    .post-content > p > img,
-    .post-content > img {
-        max-width: 1000px;
-        margin-left: calc((700px - 1000px) / 2);
-        margin-right: calc((700px - 1000px) / 2);
-        width: 1000px;
-    }
+/* Standalone portrait images: stay within text column */
+.post-content img.img-portrait {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* WordPress Tiled Galleries - Clean uniform grid */

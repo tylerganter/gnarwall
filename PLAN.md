@@ -149,52 +149,71 @@ All templates created:
 
 Generate the new static site from templates + extracted content.
 
-### Checkpoint 3A: Build Script
-- [ ] Write Python script to generate HTML from templates + JSON
-- [ ] Generate `docs/index.html` (homepage with all post cards)
-- [ ] Generate `docs/YYYY/MM/DD/slug/index.html` for each post
-- [ ] Generate `docs/about/index.html`
-- [ ] **Test locally**: Full site navigation works
-- [ ] **Review**: Spot-check several posts
+### Checkpoint 3A: Build Script ✅
+- [x] Write Python script to generate HTML from templates + JSON
+- [x] Generate `docs/index.html` (homepage with all post cards)
+- [x] Generate `docs/YYYY/MM/DD/slug/index.html` for each post
+- [x] Generate `docs/about/index.html`
+- [x] **Test locally**: Full site navigation works
+- [x] **Review**: Spot-check several posts
 
-### Checkpoint 3B: Image Path Verification
-- [ ] Verify all image `src` paths point to correct locations
-- [ ] Confirm images display on homepage thumbnails
-- [ ] Confirm images display in post bodies
-- [ ] **Test locally**: No broken images
+**Results:**
+- `scripts/build.py` - Site generator using Jinja2 templates
+- 56 posts generated in `docs/2017/` and `docs/2018/`
+- Homepage with post grid at `docs/index.html`
+- About page at `docs/about/index.html`
 
-### Checkpoint 3C: Clean Deployment
-- [ ] Remove old WordPress files from `docs/`
-- [ ] Remove `docs/_static/` (old WordPress CSS)
-- [ ] Keep `docs/wp-content/uploads/` (optimized images)
-- [ ] Add new generated HTML + CSS
-- [ ] **Test locally**: Site works with new files only
-- [ ] **Commit**: New site files (HTML + CSS)
-- [ ] **PR**: Create PR for review before merging to main
+### Checkpoint 3B: Image Path Verification ✅
+- [x] Verify all image `src` paths point to correct locations
+- [x] Confirm images display on homepage thumbnails
+- [x] Confirm images display in post bodies
+- [x] **Test locally**: No broken images
+
+**Results:**
+- All images use `/gnarwall/wp-content/uploads/YYYY/MM/filename.jpeg` paths
+- Images verified to exist at referenced paths (2017 and 2018 posts checked)
+- Homepage thumbnails use same path format
+
+### Checkpoint 3C: Clean Deployment ✅
+- [x] Remove old WordPress files from `docs/`
+- [x] Remove `docs/_static/` (old WordPress CSS)
+- [x] Remove `docs/contact/` (WordPress contact page not needed)
+- [x] Keep `docs/wp-content/uploads/` (optimized images)
+- [x] **Test locally**: Site works with new files only
+- [x] **Commit**: Cleanup changes committed
+- [x] **PR**: PR #27 created for review
+
+**Results:**
+- Removed 31 WordPress CSS files from `docs/_static/` (1.8MB)
+- Removed old contact page
+- Added 3 previously untracked images
+- Site verified working locally with new CSS only
 
 ---
 
-## Phase 4: Image Commit
+## Phase 3 Complete ✅
+
+All site generation tasks completed:
+- Build script generates all pages from templates
+- Image paths verified and images committed
+- Old WordPress cruft removed
+
+---
+
+## Phase 4: Image Commit ✅ COMPLETE
 
 Commit remaining images in manageable chunks.
 
-### Checkpoint 4A: Image Inventory
-- [ ] List all uncommitted images by directory
-- [ ] Plan commit order (by date: 2017/07, 2017/08, etc.)
-- [ ] Estimate sizes per commit
+### Checkpoint 4A-4M: Commit All Images ✅
+- [x] Inventory images referenced in posts (1959 unique images, 553MB)
+- [x] Commit 2018 images: 545 images, 156MB (PR #25)
+- [x] Commit 2017 images: 1414 images, 397MB (PR #26)
+- [x] Merge PRs to main
 
-### Checkpoint 4B-4L: Commit Images by Month
-For each month directory:
-- [ ] Stage images for that month
-- [ ] Commit with descriptive message
-- [ ] Push to branch
-- [ ] Verify push succeeds (watch for size limits)
-
-### Checkpoint 4M: Final Image Verification
-- [ ] All images committed
-- [ ] **Test locally**: Every post displays images correctly
-- [ ] **PR**: Create PR to merge to main
-- [ ] **Deploy**: Merge to main, verify on GitHub Pages
+**Results:**
+- All 56 posts now have their images committed
+- 2 referenced images were missing from disk (excluded)
+- Total: 1959 images across 2017/07 - 2018/05
 
 ---
 
@@ -242,6 +261,12 @@ docs/
 
 ---
 
+## Future Improvements (Nice to Have)
+
+- **Panorama edge-to-edge**: Very wide panorama images don't quite reach the browser viewport edges. The current CSS centering technique has limitations. A future improvement could use JavaScript to detect panoramas and apply full-bleed styling.
+
+---
+
 ## Risk Mitigation
 
 1. **Content loss**: Keep WordPress export until Phase 5 complete
@@ -253,4 +278,4 @@ docs/
 
 ## Next Step
 
-**Phase 3, Checkpoint 3A**: Write build script to generate HTML from templates + JSON.
+**Phase 5, Checkpoint 5A**: Merge PR #27, then verify GitHub Pages deployment - test homepage, posts, and about page on live site.
