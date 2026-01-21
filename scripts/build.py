@@ -248,6 +248,55 @@ def wrap_images_for_lightbox(html):
     return html
 
 
+def add_lightbox_captions(html):
+    """Add data-glightbox description to lightbox links based on caption content.
+
+    Handles two cases:
+    1. <figure> elements with <figcaption> (standalone images)
+    2. tiled-gallery-item elements with .tiled-gallery-caption (gallery images)
+    """
+    def add_caption_to_link(html_block, caption_text):
+        """Add data-glightbox attribute to a glightbox link."""
+        if not caption_text:
+            return html_block
+        # Escape quotes and semicolons for the data-glightbox attribute format
+        caption_text = caption_text.replace('"', '&quot;').replace(';', ',')
+        # Add data-glightbox with description to the link
+        return re.sub(
+            r'<a\s+href="([^"]+)"\s+class="glightbox"',
+            rf'<a href="\1" class="glightbox" data-glightbox="description: {caption_text}"',
+            html_block
+        )
+
+    def process_figure(match):
+        """Process <figure> elements with <figcaption>."""
+        figure_html = match.group(0)
+        caption_match = re.search(r'<figcaption[^>]*>(.*?)</figcaption>', figure_html, re.DOTALL)
+        if not caption_match:
+            return figure_html
+        caption_html = caption_match.group(1)
+        caption_text = re.sub(r'<[^>]+>', '', caption_html).strip()
+        return add_caption_to_link(figure_html, caption_text)
+
+    def process_gallery_item(match):
+        """Process tiled-gallery-item elements with .tiled-gallery-caption."""
+        item_html = match.group(0)
+        caption_match = re.search(r'<div[^>]*class="tiled-gallery-caption"[^>]*>(.*?)</div>', item_html, re.DOTALL)
+        if not caption_match:
+            return item_html
+        caption_text = re.sub(r'<[^>]+>', '', caption_match.group(1)).strip()
+        return add_caption_to_link(item_html, caption_text)
+
+    # Process figure elements (standalone images with captions)
+    html = re.sub(r'<figure[^>]*>.*?</figure>', process_figure, html, flags=re.DOTALL)
+
+    # Process tiled-gallery-item elements (gallery images with captions)
+    html = re.sub(r'<div[^>]*class="tiled-gallery-item[^"]*"[^>]*>.*?</div>\s*</div>',
+                  process_gallery_item, html, flags=re.DOTALL)
+
+    return html
+
+
 def fix_content_paths(html, base_url):
     """Add base_url prefix to absolute paths in content HTML and clean up query strings"""
     # Strip WordPress query parameters from image URLs (e.g., ?w=768, ?h=1024)
@@ -262,6 +311,9 @@ def fix_content_paths(html, base_url):
 
     # Wrap images with lightbox links
     html = wrap_images_for_lightbox(html)
+
+    # Add captions to lightbox links from figcaptions
+    html = add_lightbox_captions(html)
 
     if not base_url:
         return html
