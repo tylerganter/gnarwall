@@ -16,8 +16,11 @@ Then visit http://localhost:8000/gnarwall/ (the symlink `docs/gnarwall -> .` ena
 
 ## Project Overview
 
-WordPress to static site migration for gnarwall.org. See `PLAN.md` for current status.
+Static travel blog (migrated from WordPress). See `README.md` for build instructions.
 
 ### Key Directories
 - `/workspace/docs/` - Static site output (served by GitHub Pages)
+- `/workspace/data/` - Extracted content JSON
+- `/workspace/templates/` - Jinja2 HTML templates
+- `/workspace/scripts/` - Build scripts (build.py, extract_content.py)
 - `/workspace/gnarwall-export/` - Original WordPress export (6.3GB, not committed)
