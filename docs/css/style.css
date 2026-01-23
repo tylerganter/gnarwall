@@ -632,8 +632,7 @@ a {
     display: none !important;
 }
 
-/* Strip WordPress span classes but keep text */
-.post-content .p1,
+/* Strip WordPress span classes but keep text - only reset font/color, not layout */
 .post-content .s1 {
     all: unset;
 }
