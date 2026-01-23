@@ -12,9 +12,9 @@ import re
 from datetime import datetime
 from pathlib import Path
 
-# Base URL for GitHub Pages (site is at tylerganter.github.io/gnarwall/)
-# Set to empty string for local development
-BASE_URL = '/gnarwall'
+# Base URL for GitHub Pages project sites (e.g., tylerganter.github.io/gnarwall/)
+# For custom domains like gnarwall.org, use empty string (root)
+BASE_URL = ''
 
 
 class SimpleTemplate:
